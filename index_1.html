@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Welcome to...</title>
+  <meta name="description" content="18世紀の孤独な書斎から、21世紀のデジタル虚像へ——肉体の死とアバターによる置換が交差する、一夜限りの現代音楽スペクタクル。2026年12月16日（水）シアター1010にて開催。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Inter:wght@300;400;500;600&amp;family=Noto+Serif+JP:wght@200;300;400;500;600&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script id="tw-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Noto Serif JP"', '"YuMincho"', '"Yu Mincho"', 'serif'],
+            display: ['"Cormorant Garamond"', '"Noto Serif JP"', 'serif'],
+            mono: ['"Space Mono"', 'monospace'],
+            sans: ['"Inter"', 'sans-serif'],
+          },
+          colors: { void: '#030304', parchment: '#EAE8E3', ash: '#8A8882', candle: '#D49A5A', cyanGlitch: '#5CE1E6', signalRed: '#E5383B' }
+        }
+      }
+    }
+  </script>
+  <style id="site-style">
+    :root{--bg-void:#030304;--text-main:#EAE8E3;--text-muted:#8A8882}
+    *{box-sizing:border-box}
+    html,body{background-color:var(--bg-void);color:var(--text-main);font-family:"Noto Serif JP","YuMincho","Yu Mincho",serif;font-weight:300;letter-spacing:.06em;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    ::selection{background-color:#EAE8E3;color:#030304}
+    #spaceCanvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+    .noise-overlay{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:radial-gradient(rgba(234,232,227,.8) .5px,transparent .5px);background-size:3px 3px}
+    .reveal-node{opacity:0;transform:translateY(22px);transition:opacity 1.3s cubic-bezier(.16,1,.3,1),transform 1.3s cubic-bezier(.16,1,.3,1)}
+    .reveal-node.is-visible{opacity:1;transform:translateY(0)}
+    @keyframes scrollDrop{0%{transform:scaleY(0);transform-origin:top;opacity:0}45%{transform:scaleY(1);transform-origin:top;opacity:1}55%{transform:scaleY(1);transform-origin:bottom;opacity:1}100%{transform:scaleY(0);transform-origin:bottom;opacity:0}}
+    .scroll-hairline{animation:scrollDrop 3.2s cubic-bezier(.65,0,.35,1) infinite}
+    .statement-2line{white-space:nowrap;font-size:min(1.75rem,calc((100vw - 3rem)/23))}
+    @media (min-width:640px){.statement-2line{font-size:min(1.75rem,calc((100vw - 6rem)/23))}}
+    .digital-shift{position:relative;display:inline-block;transition:text-shadow .25s ease,transform .25s ease}
+    .accordion-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.16,1,.3,1)}
+    .accordion-body.open{grid-template-rows:1fr}
+    .accordion-inner{overflow:hidden}
+    .monolith-btn{position:relative;border:1px solid rgba(234,232,227,.35);background:rgba(3,3,4,.65);color:#EAE8E3;transition:background-color .4s ease,color .4s ease,border-color .4s ease}
+    .monolith-btn:hover{background:#EAE8E3;color:#030304;border-color:#EAE8E3}
+    ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:#030304}::-webkit-scrollbar-thumb{background:rgba(234,232,227,.22)}
+    html{scroll-behavior:smooth}
+    .ticket-cta.ticket-cta{background:rgba(3,3,4,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);color:#EAE8E3;font-weight:500;border:1px solid rgba(234,232,227,.65);box-shadow:inset 3px 0 0 #D49A5A;transition:background-color .45s ease,color .45s ease,border-color .45s ease}
+    .ticket-cta span[aria-hidden],.ticket-cta>span:last-child{transition:transform .45s cubic-bezier(.16,1,.3,1)}
+    .ticket-cta:hover{background:#EAE8E3;color:#030304;border-color:#EAE8E3}
+    .ticket-cta:hover span[aria-hidden],.ticket-cta:hover>span:last-child{transform:translateX(6px)}
+    .ticket-cta:focus-visible{outline:2px solid #5CE1E6;outline-offset:3px}
+    body{background:#030304;color:#EAE8E3}
+    .img-slot{position:relative;margin:0;overflow:hidden;aspect-ratio:16/9;border:1px solid rgba(234,232,227,.12);background:#070709}
+    .img-slot img{width:100%;height:100%;object-fit:cover;display:block}
+    .img-slot[data-empty]{display:none}
+    .img-slot--bg{position:absolute;inset:0;z-index:-1;aspect-ratio:auto;border:0;background:none;pointer-events:none}
+    .img-slot--bg img{object-position:50% 46%;filter:brightness(.8) contrast(1.06)}
+    .img-slot--bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,3,4,.5),rgba(3,3,4,.3) 38%,rgba(3,3,4,.82) 74%,#030304 96%)}
+    @media(min-width:768px){.img-slot--bg{left:36%}.img-slot--bg::after{background:linear-gradient(to right,#030304 0,rgba(3,3,4,.55) 14%,rgba(3,3,4,0) 42%),linear-gradient(to bottom,rgba(3,3,4,.35),rgba(3,3,4,0) 22%,rgba(3,3,4,0) 78%,#030304 100%)}}
+    .img-slot--bg[data-empty]::after{display:none}
+    body.editing .img-slot[data-empty]{display:block;border:1px dashed rgba(212,154,90,.65);background:rgba(212,154,90,.05)}
+    body.editing .img-slot--bg[data-empty]{border:0;background:none}
+    body.editing [contenteditable]{outline:1px dashed transparent;outline-offset:3px;cursor:text;transition:outline-color .15s,background-color .15s;-webkit-user-select:text;user-select:text}
+    body.editing [contenteditable]:hover{outline-color:rgba(212,154,90,.55)}
+    body.editing [contenteditable]:focus{outline:1px solid #D49A5A;background:rgba(212,154,90,.07)}
+    body.editing a[href]{cursor:pointer}
+    .slot-ui{position:absolute;z-index:3;display:flex;flex-wrap:wrap;gap:8px;align-items:center;pointer-events:auto;font:400 12px/1.5 "Inter","Hiragino Sans","Yu Gothic UI",sans-serif;letter-spacing:.03em;color:#EAE8E3}
+    .img-slot[data-empty] .slot-ui{inset:0;flex-direction:column;justify-content:center;text-align:center}
+    .img-slot:not([data-empty]) .slot-ui{left:12px;right:12px;bottom:12px;padding:8px 10px;background:rgba(3,3,4,.82);border:1px solid rgba(234,232,227,.2)}
+    .img-slot--bg .slot-ui{inset:auto;right:max(16px,env(safe-area-inset-right,0px));bottom:24px;left:auto;flex-direction:row;padding:8px 10px;background:rgba(3,3,4,.82);border:1px solid rgba(212,154,90,.6)}
+    .slot-label{color:#B9B6AF}
+    .slot-alt{flex:1 1 180px;min-width:0;background:#030304;border:1px solid rgba(234,232,227,.25);color:#EAE8E3;padding:6px 8px;font:inherit}
+    .ed-btn{font:500 12px/1 "Inter","Hiragino Sans","Yu Gothic UI",sans-serif;letter-spacing:.04em;padding:10px 14px;border:1px solid rgba(234,232,227,.35);background:#0b0b0e;color:#EAE8E3;cursor:pointer;min-height:36px}
+    .ed-btn:hover{background:#EAE8E3;color:#030304}
+    .ed-btn:focus-visible,.slot-alt:focus-visible,#edLinkInput:focus-visible{outline:2px solid #5CE1E6;outline-offset:2px}
+    .ed-btn--primary{background:#D49A5A;border-color:#D49A5A;color:#030304;font-weight:600}
+    .ed-btn--primary:hover{background:#EAE8E3;border-color:#EAE8E3}
+    .ed-btn[disabled]{opacity:.5;cursor:default}
+    #editorUI{font-family:"Inter","Hiragino Sans","Yu Gothic UI",sans-serif;letter-spacing:.03em}
+    #edStart{position:fixed;z-index:60;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+    #edBar{position:fixed;z-index:60;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));margin:0 auto;max-width:760px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 14px;background:#0b0b0e;border:1px solid rgba(234,232,227,.3);box-shadow:0 10px 40px rgba(0,0,0,.6)}
+    #edBar .ed-msg{flex:1 1 280px;min-width:0;font-size:12px;line-height:1.7;color:#B9B6AF}
+    #edBar .ed-msg strong{display:block;color:#EAE8E3;font-size:13px;font-weight:600}
+    #edState{color:#D49A5A;font-size:12px}
+    #edLink{position:fixed;z-index:61;width:min(360px,calc(100vw - 32px));padding:12px;background:#0b0b0e;border:1px solid rgba(212,154,90,.7);box-shadow:0 10px 40px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:8px;font-size:12px;color:#B9B6AF}
+    #edLink[hidden],#edBar[hidden],#edStart[hidden],#edToast[hidden]{display:none}
+    #edLinkInput{width:100%;background:#030304;border:1px solid rgba(234,232,227,.3);color:#EAE8E3;padding:8px;font:13px/1.4 "Space Mono",monospace}
+    #edLink .row{display:flex;gap:8px;justify-content:flex-end}
+    #edToast{position:fixed;z-index:62;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom,0px));max-width:calc(100vw - 32px);padding:10px 16px;background:#EAE8E3;color:#030304;font-size:13px}
+  </style>
+</head>
+<body class="bg-void text-parchment">
+  <canvas id="spaceCanvas" aria-hidden="true"></canvas>
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <header class="fixed top-0 left-0 right-0 z-40 px-5 sm:px-10 py-5 flex items-center justify-between bg-gradient-to-b from-[#030304]/90 via-[#030304]/50 to-transparent backdrop-blur-[2px]">
+    <a href="#top" class="font-display italic text-lg sm:text-xl tracking-widest text-parchment hover:opacity-70 transition-opacity">Welcome to...</a>
+    <nav aria-label="Primary Navigation" class="flex items-center gap-4 sm:gap-8">
+      <a href="#concept" class="hidden md:inline-block font-mono text-[11px] tracking-[0.22em] text-parchment/75 hover:text-parchment transition-colors">CONCEPT</a>
+      <a href="#program" class="hidden md:inline-block font-mono text-[11px] tracking-[0.22em] text-parchment/75 hover:text-parchment transition-colors">PROGRAM</a>
+      <a href="#credits" class="hidden md:inline-block font-mono text-[11px] tracking-[0.22em] text-parchment/75 hover:text-parchment transition-colors">CREDITS</a>
+      <a href="#information" class="hidden sm:inline-block font-mono text-[10px] sm:text-[11px] tracking-[0.2em] text-parchment/85 hover:text-parchment transition-colors">INFO</a>
+      <span class="text-parchment/25 font-mono text-[10px]">|</span>
+      <a href="https://docs.google.com/forms/d/16k7xTWVUyYybMxLjO58ityado6woFQUTbARE1QF6A7U/viewform?edit_requested=true" target="_blank" rel="noopener noreferrer" class="ticket-cta inline-flex items-center gap-2 font-mono text-[10px] sm:text-[11px] tracking-[0.24em] pl-4 pr-3 py-1.5 order-last"><span>TICKET</span><span aria-hidden="true">↗</span></a>
+      <button id="openMapBtn" type="button" class="font-mono text-[10px] tracking-[0.25em] uppercase px-2.5 py-1 border border-parchment/30 text-parchment/85 hover:bg-parchment hover:text-void transition-colors">MAP</button>
+    </nav>
+  </header>
+
+  <section id="top" class="relative z-10 min-h-screen flex flex-col justify-between px-6 sm:px-12 pt-28 pb-12">
+    <figure class="img-slot img-slot--bg" data-slot="hero-bg" data-label="トップのメイン画像"><img src="main-visual.jpg" alt="逆さまに身体をひねるダンサーのモノクロ写真" decoding="async" fetchpriority="high"></figure>
+    <div class="max-w-6xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono text-[10px] sm:text-[11px] tracking-[0.26em] text-ash">
+      <span>2026.12.16 WED &nbsp;/&nbsp; THEATER 1010 (KITASENJU, TOKYO)</span>
+      <span class="uppercase">Sogakudo Project Revival Performance</span>
+    </div>
+    <div class="relative mt-auto mb-6 md:my-auto pt-[52vh] md:pt-0 pb-6 md:py-16 w-full md:max-w-6xl md:mx-auto flex flex-col items-center md:items-start justify-center text-center md:text-left">
+      <div aria-hidden="true" class="pointer-events-none absolute md:hidden w-[260px] h-[260px] sm:w-[360px] sm:h-[360px] md:w-[420px] md:h-[420px] border border-parchment/[0.12] flex items-center justify-center">
+        <div class="w-[86%] h-[86%] border border-parchment/[0.06]"></div>
+        <span class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-parchment/40"></span>
+        <span class="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-parchment/40"></span>
+        <span class="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-parchment/40"></span>
+        <span class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-parchment/40"></span>
+      </div>
+      <p class="font-serif text-xs sm:text-sm tracking-[0.28em] text-parchment/75 mb-6 sm:mb-8">奏楽堂企画復活公演</p>
+      <h1 class="font-display font-light italic text-5xl sm:text-7xl md:text-8xl lg:text-[6.5rem] tracking-[0.08em] text-parchment leading-none select-none md:max-w-[56%]">Welcome to...</h1>
+      <div class="mt-8 flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 font-mono text-[10px] sm:text-[11px] tracking-[0.22em] text-ash">
+        <span>KAIJA SAARIAHO : ÉMILIE</span><span class="text-parchment/25">×</span><span>NOBUAKI SATOH &amp; TACOMI : FLUTE CONCERTO</span>
+      </div>
+      <div class="mt-10 sm:mt-12 flex flex-col items-center md:items-start gap-3">
+        <a href="https://docs.google.com/forms/d/16k7xTWVUyYybMxLjO58ityado6woFQUTbARE1QF6A7U/viewform?edit_requested=true" target="_blank" rel="noopener noreferrer" class="ticket-cta inline-flex items-center justify-between gap-8 sm:gap-12 px-7 sm:px-10 py-5 sm:py-6 font-mono text-sm sm:text-base tracking-[0.24em]"><span>チケット予約はこちら</span><span aria-hidden="true">→</span></a>
+        <span class="font-mono text-[10px] sm:text-[11px] tracking-[0.22em] text-parchment/75">2026.12.16 WED &nbsp;18:30 START &nbsp;/&nbsp; 一般予約受付中</span>
+      </div>
+    </div>
+    <div class="flex flex-col items-center justify-center gap-3">
+      <span class="font-mono text-[9px] tracking-[0.35em] text-ash uppercase">Scroll</span>
+      <div class="w-[1px] h-14 bg-parchment/15 overflow-hidden"><div class="w-full h-full bg-parchment/80 scroll-hairline"></div></div>
+    </div>
+  </section>
+
+  <main class="relative z-10">
+    <section id="concept" class="py-32 sm:py-48 px-6 sm:px-12 border-t border-parchment/[0.08]">
+      <div class="max-w-3xl mx-auto">
+        <div class="reveal-node mb-16 sm:mb-24">
+          <span class="font-mono text-[10px] tracking-[0.32em] text-ash uppercase block mb-4">01 / STATEMENT</span>
+          <h2 class="statement-2line font-serif font-light leading-[2.2] tracking-[0.12em] text-parchment">肉体の死とアバターによる置換が交差する、<br>一夜限りの現代音楽スペクタクル。</h2>
+        </div>
+        <figure class="img-slot mb-16 sm:mb-24" data-slot="concept" data-label="コンセプトの画像" data-empty=""><img alt="" decoding="async" loading="lazy"></figure>
+        <div class="reveal-node space-y-10 text-sm sm:text-[15px] leading-[2.35] tracking-[0.09em] text-parchment/85 font-serif">
+          <p>18世紀、ろうそくの灯る書斎で迫りくる肉体の死を前にしながら、なお自らの知性と愛の痕跡を言葉へと刻みつけようとした女性科学者エミリー・デュ・シャトレの「生理的で崇高な死」。</p>
+          <p>21世紀、舞台上の半透明の箱に閉じ込められた生身の奏者とオーケストラが放つ熱量が、過剰な拡張の果てに巨大な3Dデジタル・アバターへと回収され、実在の座を奪われて空洞化していく「デジタル空間での表象的な死（置換）」。</p>
+          <p>時代とメディア環境を隔てた二つの「死の表象」と身体の行方を、前後半二部構成のプログラムによってひとつの劇場空間へと立ち上げる。</p>
+        </div>
+        <div class="reveal-node mt-24 sm:mt-32 pt-14 border-t border-parchment/15 space-y-8">
+          <div class="font-mono text-[10px] tracking-[0.28em] text-ash uppercase">BACKGROUND OF REVIVAL — 2025 → 2026.02.26 → 2026.12.16</div>
+          <div class="space-y-7 text-sm sm:text-[15px] leading-[2.3] tracking-[0.08em] text-parchment/80">
+            <p>本企画は2025年、東京藝術大学の学内公募企画「奏楽堂企画」に選出され、約1年にわたり準備を重ねてきた。しかし公演直前の2026年2月26日、東京藝術大学奏楽堂において発生した天井パネル落下事故により奏楽堂は長期閉鎖となり、本公演はやむなく中止の決断を迫られた。</p>
+            <p>一度は閉ざされた扉の先に、再び観客を迎え入れること——。公演タイトル『Welcome to...』には、予期せぬ事故によって断絶された表現の場を再び開き、まだ誰も見たことのない音響と視覚の境界線へと観客を招き入れるという切実な願いが込められている。</p>
+            <p>場所を北千住・シアター1010へと移し、学生・若手クリエイター有志の再集結によって、2026年12月16日、悲願の復活公演を実現する。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="program" class="py-32 sm:py-48 px-6 sm:px-12 border-t border-parchment/[0.08]">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-node mb-20 sm:mb-28">
+          <span class="font-mono text-[10px] tracking-[0.32em] text-ash uppercase block mb-3">02 / PROGRAM</span>
+          <h2 class="font-display font-light text-3xl sm:text-5xl tracking-[0.14em] text-parchment">PROGRAM &amp; CRITICAL NOTES</h2>
+        </div>
+        <article id="part1" class="reveal-node pb-28 sm:pb-36 border-b border-parchment/15">
+          <div class="flex flex-wrap items-baseline justify-between gap-4 mb-6">
+            <span class="font-mono text-[11px] tracking-[0.28em] text-candle uppercase">PART I &nbsp;—&nbsp; MONODRAMA OPERA (2008)</span>
+            <span class="font-mono text-[10px] tracking-[0.2em] text-ash">JAPANESE PREMIERE STYLE / CHAMBER ORCHESTRA &amp; ELECTRONICS</span>
+          </div>
+          <h3 class="font-serif font-normal text-2xl sm:text-4xl tracking-[0.12em] leading-relaxed text-parchment">カイヤ・サーリアホ：モノオペラ『エミリー』</h3>
+          <p class="font-display italic text-lg sm:text-2xl tracking-[0.1em] text-parchment/65 mt-2">Kaija Saariaho : Émilie</p>
+          <div class="mt-8 pt-6 border-t border-parchment/10 flex flex-wrap gap-x-10 gap-y-3 font-serif text-xs sm:text-sm tracking-[0.12em] text-parchment/85">
+            <div><span class="font-mono text-[10px] text-ash mr-3">SOPRANO</span>石山 夢乃</div>
+            <div><span class="font-mono text-[10px] text-ash mr-3">CONDUCTOR</span>高橋 星花</div>
+            <div><span class="font-mono text-[10px] text-ash mr-3">ORCHESTRA</span>東京藝術大学有志オーケストラ</div>
+          </div>
+          <figure class="img-slot mt-10" data-slot="part1" data-label="第1部の画像" data-empty=""><img alt="" decoding="async" loading="lazy"></figure>
+          <div class="mt-10 space-y-7 text-sm sm:text-[15px] leading-[2.35] tracking-[0.08em] text-parchment/80">
+            <p>アイザック・ニュートンの『プリンキピア』をフランス語に翻訳した18世紀の女性物理学者・数学者、エミリー・デュ・シャトレ（1706–1749）の生涯を描いたモノオペラ。</p>
+            <p>42歳での出産に伴う死の予感のなか、ろうそくの灯る孤独な書斎で自らの知的探求の結晶と愛の記憶を遺そうとする切迫した時間感覚を、ソプラノの微細な息遣い、鼓動を思わせる管弦楽のテクスチュア、そして空間に引き伸ばされる電子音響の残響によって彫琢する。滅びゆく生身の肉体と、音と言葉として定着していく知性との相克が静謐に浮かび上がる。</p>
+          </div>
+        </article>
+        <article id="part2" class="reveal-node pt-28 sm:pt-36">
+          <div class="flex flex-wrap items-baseline justify-between gap-4 mb-6">
+            <span class="font-mono text-[11px] tracking-[0.28em] text-cyanGlitch uppercase">PART II &nbsp;—&nbsp; WORLD PREMIERE (2026)</span>
+            <span class="font-mono text-[10px] tracking-[0.2em] text-ash">FLUTE, ORCHESTRA, ELECTRONICS, STAGE BOX &amp; 3D AVATAR</span>
+          </div>
+          <h3 class="font-serif font-normal text-2xl sm:text-4xl tracking-[0.12em] leading-relaxed text-parchment digital-reactive"><span class="digital-shift">佐藤伸輝＆たこミ：『フルート協奏曲』</span>（世界初演）</h3>
+          <p class="font-display italic text-lg sm:text-2xl tracking-[0.1em] text-parchment/65 mt-2">Nobuaki Satoh &amp; tacomi : Flute Concerto (World Premiere)</p>
+          <div class="mt-8 pt-6 border-t border-parchment/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-3 gap-x-8 font-serif text-xs sm:text-sm tracking-[0.12em] text-parchment/85">
+            <div><span class="font-mono text-[10px] text-ash mr-3">FLUTE</span>菊地 奏絵</div>
+            <div><span class="font-mono text-[10px] text-ash mr-3">ELECTRONICS</span>たこミ</div>
+            <div><span class="font-mono text-[10px] text-ash mr-3">CONDUCTOR</span>高橋 星花</div>
+            <div><span class="font-mono text-[10px] text-ash mr-3">VISUAL / VJ</span>JACKSON kaki</div>
+            <div><span class="font-mono text-[10px] text-ash mr-3">SOUND</span>磯部 英彬</div>
+          </div>
+          <figure class="img-slot mt-10" data-slot="part2" data-label="第2部の画像" data-empty=""><img alt="" decoding="async" loading="lazy"></figure>
+          <div class="mt-12 space-y-8 text-sm sm:text-[15px] leading-[2.35] tracking-[0.08em] text-parchment/85">
+            <p class="text-base sm:text-lg text-parchment font-normal tracking-[0.14em] border-l border-parchment/40 pl-5 py-1">「身体の拡張は、どの地点で『喪失』へと反転するのか。」</p>
+            <p>本作は、協奏曲の歴史が前提としてきた「個対オーケストラ」という権威的な階層構造を解体する。シンフォニックな管弦楽の響き、シネマティックな音響、インダストリアル・エレクトロニカ、そしてポストクラブ／ハイパーポップ以降のビートがジャンルの境界を失い、ひとつの水平面上に乱立する。</p>
+            <p>2002年・2003年生まれの制作陣（佐藤伸輝、たこミ、JACKSON kaki、菊地奏絵）が思春期に共有した「アルゴリズム最適化以前のインターネットの混沌」を原風景に据え、古代ギリシャのシュリンクス神話における「追われるニンフの無防備な身体が匿名的な葦（＝楽器）へと変えられた記憶」と、現代SNSにおける文脈崩壊（Context Collapse）とを接続する。</p>
+            <p>WEBBによる舞台上の半透明の箱（2m×2m）によって姿を隠されたソリストと音源の秘匿（アクースマティック）、たこミによる増幅・変調された電子音響、そしてJACKSON kakiによる巨大な3Dデジタル・アバターが交錯。生身の奏者の実体と虚像が混濁し、音響と視覚の熱量が臨界に達した瞬間、表現の帰属は虚像へと乗っ取られ、生身の身体は空洞化していく——その劇的な転換点を提示する劇場的スペクタクル。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="credits" class="py-32 sm:py-48 px-6 sm:px-12 border-t border-parchment/[0.08]">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-node mb-16 sm:mb-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div>
+            <span class="font-mono text-[10px] tracking-[0.32em] text-ash uppercase block mb-3">03 / CREDITS &amp; ARTISTS</span>
+            <h2 class="font-display font-light text-3xl sm:text-5xl tracking-[0.14em] text-parchment">CAST &amp; CREATIVE STAFF</h2>
+          </div>
+          <span class="font-mono text-[10px] tracking-[0.2em] text-ash">CLICK NAME TO VIEW PROFILE</span>
+        </div>
+        <div class="reveal-node border-t border-parchment/20 divide-y divide-parchment/15">
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">CONDUCTOR</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">高橋 星花 <span class="font-display italic text-sm text-ash ml-2">Seika Takahashi</span></span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">東京藝術大学音楽学部指揮科在学中。第1部カイヤ・サーリアホ『エミリー』および第2部『フルート協奏曲』の全プログラムを指揮。精緻なスコア解釈と複雑な現代アンサンブルの統率を手掛ける。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">ORCHESTRA</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">東京藝術大学有志オーケストラ</span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">東京藝術大学に在籍・卒業した若手演奏家による特別編成オーケストラ。奏楽堂企画の志を受け継ぎ、繊細な室内楽的響きからエレクトロニクスと拮抗する強靭な音響までを立ち上げる。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">SOPRANO (ÉMILIE)</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">石山 夢乃 <span class="font-display italic text-sm text-ash ml-2">Yumeno Ishiyama</span></span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">第1部カイヤ・サーリアホ作曲モノオペラ『エミリー』タイトルロール（ソプラノ独唱）。18世紀の科学者エミリー・デュ・シャトレの孤独な書斎における愛と死のモノローグを、圧倒的な集中力と繊細な音色で描き出す。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">FLUTE SOLO</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">菊地 奏絵 <span class="font-display italic text-sm text-ash ml-2">Kanae Kikuchi</span></span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">2002年生まれ。東京藝術大学音楽学部器楽科フルート専攻。本公演の企画・プロデュースおよび第2部『フルート協奏曲』のソリストを務める。舞台上の2m×2mの半透明ボックスの内部から、電子音響・3D映像と交差するフルート演奏を展開する。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">COMPOSER</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">佐藤 伸輝 <span class="font-display italic text-sm text-ash ml-2">Nobuaki Satoh</span></span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">2003年生まれ。東京藝術大学音楽学部作曲科在学中。第2部『フルート協奏曲』作曲。管弦楽法と現代の電子音響・メディア表現を横断し、デジタル空間における身体の拡張と喪失をテーマに制作を行う。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">ELECTRONICS</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">たこミ <span class="font-display italic text-sm text-ash ml-2">tacomi</span></span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">第2部『フルート協奏曲』共同作曲・エレクトロニクス担当。インダストリアル、ポストクラブ、ハイパーポップ以降の鋭利なサウンドデザインと固定メディア制作によって、生楽器とオーケストラの音響構造を解体・再構築する。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">DIRECTION / STAGE ART</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">WEBB</span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">公演全体の演出・舞台美術を担当。舞台上に設置される2m×2mの半透明ステージボックスの設計・空間演出を手掛け、視線と音響の遮蔽・透過によって劇場空間の知覚構造を変容させる。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">VISUAL / VJ</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">JACKSON kaki</span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">アーティスト／VJ／3Dビジュアルクリエイター。第2部『フルート協奏曲』の映像演出およびメインビジュアルを担当。3Dデジタル・アバターとリアルタイム映像によって、生身の奏者の身体を虚像へと置換する視覚体験を構築する。</p></div></div>
+          </div>
+          <div class="credit-item">
+            <button type="button" class="credit-trigger w-full py-6 flex items-baseline justify-between gap-4 text-left group" aria-expanded="false">
+              <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-8"><span class="font-mono text-[10px] tracking-[0.25em] text-ash w-48 shrink-0 uppercase">SOUND CHIEF</span><span class="font-serif text-lg sm:text-xl tracking-[0.14em] text-parchment group-hover:opacity-75 transition-opacity">磯部 英彬 <span class="font-display italic text-sm text-ash ml-2">Hideaki Isobe</span></span></div>
+              <span class="font-mono text-xs text-ash group-hover:text-parchment transition-colors trigger-symbol">+</span>
+            </button>
+            <div class="accordion-body"><div class="accordion-inner"><p class="pb-7 sm:pl-56 text-xs sm:text-sm leading-[2.1] text-parchment/75 font-serif">公演全体の音響設計・サウンドチーフ。シアター1010におけるアコースティック楽器の収音、電子音響の空間定位、アクースマティックな音場設計を統括する。</p></div></div>
+          </div>
+        </div>
+        <div class="reveal-node mt-12 pt-8 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 font-serif text-xs tracking-[0.15em] text-ash">
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em]">ORGANIZER</span>
+          <span>東京藝術大学有志オーケストラ ／ 奏楽堂企画復活公演《Welcome to...》実行委員会</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="information" class="py-32 sm:py-48 px-6 sm:px-12 border-t border-parchment/[0.08]">
+      <div class="max-w-4xl mx-auto">
+        <div class="reveal-node mb-16 sm:mb-24">
+          <span class="font-mono text-[10px] tracking-[0.32em] text-ash uppercase block mb-3">04 / INFORMATION &amp; SUPPORT</span>
+          <h2 class="font-display font-light text-3xl sm:text-5xl tracking-[0.14em] text-parchment">PERFORMANCE &amp; TICKETS</h2>
+        </div>
+        <figure class="img-slot mb-16" data-slot="info" data-label="公演情報の画像" data-empty=""><img alt="" decoding="async" loading="lazy"></figure>
+        <dl class="reveal-node border-t border-parchment/20 divide-y divide-parchment/15 font-serif">
+          <div class="py-8 grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-6 items-baseline">
+            <dt class="sm:col-span-4 font-mono text-[10px] tracking-[0.26em] text-ash uppercase">DATE &amp; TIME</dt>
+            <dd class="sm:col-span-8"><p class="text-lg sm:text-xl tracking-[0.14em] text-parchment">2026年12月16日（水）</p><p class="font-mono text-xs sm:text-sm tracking-[0.18em] text-parchment/75 mt-1.5">17:45 OPEN &nbsp;/&nbsp; 18:30 START</p></dd>
+          </div>
+          <div class="py-8 grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-6 items-baseline">
+            <dt class="sm:col-span-4 font-mono text-[10px] tracking-[0.26em] text-ash uppercase">VENUE</dt>
+            <dd class="sm:col-span-8 space-y-2">
+              <p class="text-lg sm:text-xl tracking-[0.14em] text-parchment">シアター1010（THEATER 1010）</p>
+              <p class="text-xs sm:text-sm leading-relaxed text-parchment/75">〒120-0034 東京都足立区千住3-92 千住ミルディスI番館 10階<br>（JR常磐線・東京メトロ千代田線/日比谷線・東武スカイツリーライン・つくばエクスプレス「北千住駅」4番出口直結・徒歩5分）</p>
+              <div class="pt-3 flex flex-wrap items-center gap-5">
+                <button type="button" id="inlineMapBtn" class="font-mono text-[11px] tracking-[0.2em] underline underline-offset-4 text-parchment hover:opacity-70 transition-opacity">[ サイト内案内図 MAP を開く ]</button>
+                <a href="https://maps.google.com/?q=シアター1010+東京都足立区千住3-92" target="_blank" rel="noopener noreferrer" class="font-mono text-[11px] tracking-[0.2em] underline underline-offset-4 text-parchment/75 hover:text-parchment transition-colors">GOOGLE MAPS ↗</a>
+              </div>
+            </dd>
+          </div>
+          <div class="py-8 grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-6 items-baseline">
+            <dt class="sm:col-span-4 font-mono text-[10px] tracking-[0.26em] text-ash uppercase">TICKETS</dt>
+            <dd class="sm:col-span-8 space-y-2">
+              <p class="text-base sm:text-lg tracking-[0.12em] text-parchment">一般予約受付中</p>
+              <p class="text-xs sm:text-sm text-parchment/75 leading-relaxed">2026年10月13日（火）20:00より予約開始。</p>
+              <div class="pt-3"><a href="https://docs.google.com/forms/d/16k7xTWVUyYybMxLjO58ityado6woFQUTbARE1QF6A7U/viewform?edit_requested=true" target="_blank" rel="noopener noreferrer" class="ticket-cta inline-flex items-center justify-between gap-8 px-8 py-5 font-mono text-sm tracking-[0.24em]"><span>チケット申し込みフォーム</span><span>↗</span></a></div>
+            </dd>
+          </div>
+          <div class="py-10 grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-baseline">
+            <dt class="sm:col-span-4 font-mono text-[10px] tracking-[0.26em] text-ash uppercase">CROWDFUNDING</dt>
+            <dd class="sm:col-span-8 space-y-5">
+              <div>
+                <p class="text-base sm:text-lg tracking-[0.1em] text-parchment leading-relaxed">奏楽堂企画復活公演《Welcome to...》クラウドファンディングプロジェクト</p>
+                <div class="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs tracking-[0.15em] text-parchment/75"><span>GOAL: 800,000 JPY</span><span>DEADLINE: 2027.01.29</span></div>
+              </div>
+              <p class="text-xs sm:text-sm leading-[2.1] text-parchment/75">2026年2月26日の奏楽堂天井パネル落下事故による中止を乗り越え、シアター1010での復活公演を実現するためのプロジェクト。劇場使用費、2m×2m半透明ステージボックス制作費、立体音響・3D映像機材費へのご支援を募っています。</p>
+              <div class="pt-2"><a href="https://motion-gallery.net/projects/Welcome_to" target="_blank" rel="noopener noreferrer" class="monolith-btn inline-flex items-center justify-between gap-6 px-7 py-4 font-mono text-xs tracking-[0.22em] uppercase"><span>MOTION GALLERY — チケット予約・支援ページ</span><span>↗</span></a></div>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="relative z-10 border-t border-parchment/15 py-16 px-6 sm:px-12">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8">
+      <div>
+        <a href="#top" class="font-display italic text-2xl tracking-[0.14em] text-parchment">Welcome to...</a>
+        <p class="font-serif text-xs tracking-[0.14em] text-ash mt-2">2026.12.16 WED &nbsp;|&nbsp; THEATER 1010, KITASENJU</p>
+      </div>
+      <div class="text-left sm:text-right space-y-1.5">
+        <p class="font-serif text-[11px] tracking-[0.12em] text-parchment/70">東京藝術大学有志オーケストラ ／ 奏楽堂企画復活公演《Welcome to...》実行委員会</p>
+        <p class="font-mono text-[10px] tracking-[0.2em] text-ash">© 2026 WELCOME TO... PROJECT</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="mapModal" role="dialog" aria-modal="true" aria-labelledby="mapModalTitle" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-8">
+    <div id="mapBackdrop" class="absolute inset-0 bg-[#030304]/90 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-2xl border border-parchment/30 bg-[#070709] p-6 sm:p-10 text-parchment shadow-2xl">
+      <div class="flex items-baseline justify-between pb-4 border-b border-parchment/15">
+        <div>
+          <span class="font-mono text-[10px] tracking-[0.28em] text-ash uppercase block">ACCESS DIAGRAM</span>
+          <h2 id="mapModalTitle" class="font-serif text-xl sm:text-2xl tracking-[0.14em] mt-1">シアター1010（THEATER 1010）</h2>
+        </div>
+        <button id="closeMapBtn" type="button" class="font-mono text-xs tracking-[0.25em] px-3 py-1.5 border border-parchment/30 hover:bg-parchment hover:text-void transition-colors">CLOSE [×]</button>
+      </div>
+      <div class="my-6 border border-parchment/15 bg-[#030304] p-3 sm:p-5">
+        <svg viewBox="0 0 600 280" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="#EAE8E3" stroke-opacity="0.06" stroke-width="1"><line x1="0" y1="70" x2="600" y2="70"></line><line x1="0" y1="140" x2="600" y2="140"></line><line x1="0" y1="210" x2="600" y2="210"></line><line x1="150" y1="0" x2="150" y2="280"></line><line x1="300" y1="0" x2="300" y2="280"></line><line x1="450" y1="0" x2="450" y2="280"></line></g>
+          <line x1="130" y1="10" x2="130" y2="270" stroke="#EAE8E3" stroke-opacity="0.28" stroke-width="8"></line>
+          <line x1="130" y1="10" x2="130" y2="270" stroke="#030304" stroke-width="2" stroke-dasharray="6 6"></line>
+          <text x="130" y="274" text-anchor="middle" fill="#8A8882" font-size="9" font-family="monospace" letter-spacing="1">JR / METRO / TOBU / TX</text>
+          <rect x="85" y="95" width="90" height="90" fill="#030304" stroke="#EAE8E3" stroke-width="1.2"></rect>
+          <text x="130" y="137" text-anchor="middle" fill="#EAE8E3" font-size="13" font-family="serif" letter-spacing="2">北千住駅</text>
+          <text x="130" y="156" text-anchor="middle" fill="#8A8882" font-size="9" font-family="monospace">EXIT 4 DIRECT</text>
+          <line x1="175" y1="140" x2="345" y2="140" stroke="#EAE8E3" stroke-width="1.2" stroke-dasharray="4 4"></line>
+          <circle cx="260" cy="140" r="2.5" fill="#EAE8E3"></circle>
+          <text x="260" y="126" text-anchor="middle" fill="#EAE8E3" font-size="10" font-family="serif" letter-spacing="1">西口デッキ直結・徒歩5分</text>
+          <rect x="345" y="75" width="210" height="130" fill="#030304" stroke="#EAE8E3" stroke-width="1.5"></rect>
+          <rect x="351" y="81" width="198" height="118" fill="none" stroke="#EAE8E3" stroke-opacity="0.3" stroke-width="0.7"></rect>
+          <text x="450" y="112" text-anchor="middle" fill="#8A8882" font-size="9" font-family="monospace" letter-spacing="2">SENJU MILDIS I — 10F</text>
+          <text x="450" y="142" text-anchor="middle" fill="#EAE8E3" font-size="17" font-family="serif" letter-spacing="3">シアター1010</text>
+          <text x="450" y="166" text-anchor="middle" fill="#8A8882" font-size="10" font-family="serif" letter-spacing="1">東京都足立区千住3-92</text>
+          <text x="450" y="186" text-anchor="middle" fill="#EAE8E3" font-size="9" font-family="monospace" letter-spacing="1.5">2026.12.16 / 18:30 START</text>
+        </svg>
+      </div>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-serif text-parchment/80">
+        <p>〒120-0034 東京都足立区千住3-92 千住ミルディスI番館 10階</p>
+        <a href="https://maps.google.com/?q=シアター1010+東京都足立区千住3-92" target="_blank" rel="noopener noreferrer" class="monolith-btn shrink-0 px-4 py-2 font-mono text-[10px] tracking-[0.2em] uppercase text-center">OPEN GOOGLE MAPS ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('spaceCanvas');
+      const ctx = canvas.getContext('2d');
+      let width = 0, height = 0, scrollProgress = 0, time = 0;
+      const embers = Array.from({ length: 34 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + 0.4, speedY: -(Math.random() * 0.00025 + 0.00008), drift: Math.random() * Math.PI * 2, alpha: Math.random() * 0.45 + 0.1 }));
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth; height = window.innerHeight;
+        canvas.width = width * dpr; canvas.height = height * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      function updateScrollProgress() {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        scrollProgress = docHeight > 0 ? Math.min(Math.max(window.scrollY / docHeight, 0), 1) : 0;
+        document.body.classList.toggle('phase-digital', scrollProgress > 0.45);
+      }
+      function renderSpace() {
+        time += 0.014;
+        ctx.clearRect(0, 0, width, height);
+        const digitalFactor = Math.min(Math.max((scrollProgress - 0.3) / 0.45, 0), 1);
+        const organicFactor = 1 - digitalFactor;
+        if (organicFactor > 0.01) {
+          const breathe = 0.85 + Math.sin(time * 1.4) * 0.15;
+          const grad = ctx.createRadialGradient(width * 0.5 + Math.sin(time * 0.5) * 24, height * 0.45 + Math.cos(time * 0.4) * 18, 10, width * 0.5, height * 0.45, Math.max(width, height) * 0.52);
+          grad.addColorStop(0, `rgba(212, 154, 90, ${0.065 * organicFactor * breathe})`);
+          grad.addColorStop(0.55, `rgba(140, 92, 48, ${0.022 * organicFactor})`);
+          grad.addColorStop(1, 'rgba(3, 3, 4, 0)');
+          ctx.fillStyle = grad; ctx.fillRect(0, 0, width, height);
+          embers.forEach(p => {
+            p.y += p.speedY; p.drift += 0.012;
+            if (p.y < -0.05) p.y = 1.05;
+            const px = (p.x + Math.sin(p.drift) * 0.025) * width, py = p.y * height;
+            const flicker = 0.6 + Math.sin(time * 3 + p.drift) * 0.4;
+            ctx.beginPath(); ctx.arc(px, py, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(234, 200, 155, ${p.alpha * organicFactor * flicker})`; ctx.fill();
+          });
+        }
+        if (digitalFactor > 0.01) {
+          const gridSize = 64;
+          ctx.strokeStyle = `rgba(92, 225, 230, ${0.038 * digitalFactor})`; ctx.lineWidth = 0.6; ctx.beginPath();
+          for (let x = 0; x < width; x += gridSize) { ctx.moveTo(x, 0); ctx.lineTo(x, height); }
+          for (let y = (time * 12) % gridSize; y < height; y += gridSize) { ctx.moveTo(0, y); ctx.lineTo(width, y); }
+          ctx.stroke();
+          const scanY = ((time * 90) % (height + 120)) - 60;
+          const scanGrad = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 40);
+          scanGrad.addColorStop(0, 'rgba(92, 225, 230, 0)');
+          scanGrad.addColorStop(0.5, `rgba(92, 225, 230, ${0.045 * digitalFactor})`);
+          scanGrad.addColorStop(1, 'rgba(92, 225, 230, 0)');
+          ctx.fillStyle = scanGrad; ctx.fillRect(0, scanY - 40, width, 80);
+          if (Math.random() < 0.14 * digitalFactor) {
+            const slitY = Math.random() * height, slitW = Math.random() * (width * 0.35) + 40, slitX = Math.random() * (width - slitW);
+            ctx.fillStyle = `rgba(234, 232, 227, ${0.06 * digitalFactor})`; ctx.fillRect(slitX, slitY, slitW, 1);
+          }
+        }
+        requestAnimationFrame(renderSpace);
+      }
+      window.addEventListener('resize', resizeCanvas);
+      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      resizeCanvas(); updateScrollProgress(); renderSpace();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal-node').forEach(n => observer.observe(n));
+
+      document.querySelectorAll('.credit-trigger').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const body = trigger.nextElementSibling, symbol = trigger.querySelector('.trigger-symbol');
+          const isOpen = body.classList.contains('open');
+          body.classList.toggle('open', !isOpen);
+          trigger.setAttribute('aria-expanded', String(!isOpen));
+          if (symbol) symbol.textContent = isOpen ? '+' : '−';
+        });
+      });
+
+      const mapModal = document.getElementById('mapModal');
+      function openMap() { mapModal.classList.remove('hidden'); mapModal.classList.add('flex'); document.body.style.overflow = 'hidden'; }
+      function closeMap() { mapModal.classList.add('hidden'); mapModal.classList.remove('flex'); document.body.style.overflow = ''; }
+      ['openMapBtn', 'inlineMapBtn'].forEach(id => { const b = document.getElementById(id); if (b) b.addEventListener('click', openMap); });
+      ['closeMapBtn', 'mapBackdrop'].forEach(id => { const b = document.getElementById(id); if (b) b.addEventListener('click', closeMap); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !mapModal.classList.contains('hidden')) closeMap(); });
+    });
+  </script>
+</body>
+</html>
