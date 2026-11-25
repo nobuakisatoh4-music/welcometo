@@ -1,5 +1,13 @@
 {
   "name": "welcometo",
+  "main": "worker.js",
   "compatibility_date": "2026-11-01",
-  "assets": { "directory": "./" }
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "run_worker_first": ["/flute-concerto/api/*"]
+  },
+  "kv_namespaces": [
+    { "binding": "DATA" }
+  ]
 }

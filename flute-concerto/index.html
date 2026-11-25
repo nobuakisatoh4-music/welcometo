@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <title>Flute Concerto Parts</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="robots" content="noindex, nofollow">
@@ -177,6 +183,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 }
 @media (prefers-reduced-motion:reduce){.band div{animation:none}.card,.pill,.btn,.pk,.stk{transition:none}.card:hover{transform:none}}
 </style>
+</head>
+<body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <filter id="warp" x="-5%" y="-5%" width="110%" height="110%">
@@ -289,11 +297,31 @@ const $=s=>document.querySelector(s);
 const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const HASH='0ba110cafa278fd0bd9c340fd6a7a0a5e342db4118e89b32f1173ede288ab2f5';
 let D=null, ov={}, picked=new Set(), admin=false, db=null, assets=null, dl=null;
+/* ---- 公開サイト用（claude.ai の外で開かれたとき）: Cloudflare Worker の API を使う ---- */
+const PUB=!(window.claude&&window.claude.use);
+const API='/flute-concerto/api/';
+let apw='';
+async function api(path,opt){opt=opt||{};const h=Object.assign({},opt.headers||{});
+  if(opt.admin)h['x-admin-password']=encodeURIComponent(apw);
+  const r=await fetch(API+path,{method:opt.method||'GET',headers:h,body:opt.body,cache:'no-store'});
+  if(!r.ok){const e=new Error('http '+r.status);e.status=r.status;throw e}
+  return r.json()}
+async function pubLoad(){try{const s=await api('state');ov=s.files||{};fb=s.feedback||{};fdone={};Object.keys(s.fbdone||{}).forEach(k=>fdone[k]=true);applyOv();renderFb()}catch(e){}}
+const pubDb={doc:path=>{const[c,id]=path.split('/');return{
+  async set(d){
+    if(c==='feedback'){await api('feedback',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(d)})}
+    else if(c==='fbdone'){await api('fbdone/'+id,{method:'PUT',admin:true})}
+    await pubLoad()},
+  async delete(){
+    if(c==='fbdone')await api('fbdone/'+id,{method:'DELETE',admin:true});
+    else if(c==='files')await api('file/'+id,{method:'DELETE',admin:true});
+    await pubLoad()}}}};
+const pubDl={async save({filename,data}){const u=URL.createObjectURL(data);const a=document.createElement('a');a.href=u;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}};
 const bufs=new Map(); let tt;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 const all=()=>D?[D.score,...D.parts]:[];
-const urlOf=p=>ov[p.k]&&ov[p.k].id?'/_blob/'+ov[p.k].id:p.f;
+const urlOf=p=>ov[p.k]&&ov[p.k].id?(PUB&&ov[p.k].url?'/flute-concerto/'+ov[p.k].url:'/_blob/'+ov[p.k].id):p.f;
 const mbOf=p=>ov[p.k]&&ov[p.k].size?(ov[p.k].size/1e6).toFixed(1):p.mb;
 const cardEls=new Map();
 
@@ -403,10 +431,10 @@ addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').hidden)$('#m
 
 /* ---- admin ---- */
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-$('#login').onclick=()=>{if(admin){admin=false;document.body.classList.remove('admin');$('#login').textContent='管理';toast('管理モードを終了しました');return}
+$('#login').onclick=()=>{if(admin){admin=false;apw='';document.body.classList.remove('admin');$('#login').textContent='管理';toast('管理モードを終了しました');return}
   $('#modal').hidden=false;$('#err').textContent='';$('#pw').value='';setTimeout(()=>$('#pw').focus(),30)};
 $('#lc').onclick=()=>{$('#modal').hidden=true};
-$('#lf').onsubmit=async e=>{e.preventDefault();let ok=false;try{ok=(await sha($('#pw').value))===HASH}catch(_){}
+$('#lf').onsubmit=async e=>{e.preventDefault();let ok=false;if(PUB){try{apw=$('#pw').value;await api('auth',{method:'POST',admin:true});ok=true}catch(_){apw=''}}else{try{ok=(await sha($('#pw').value))===HASH}catch(_){}}
   if(!ok){$('#err').textContent='パスワードが違います';return}
   admin=true;document.body.classList.add('admin');$('#modal').hidden=true;$('#login').textContent='管理を終了';
   toast(db&&assets?'管理モード：差し替えできます':'管理モード（この画面では差し替え機能が使えません。編集権限のあるアカウントで開いてください）')};
@@ -415,9 +443,12 @@ function replace(p){if(!db||!assets){toast('差し替えには編集権限での
 $('#pick').onchange=async e=>{const f=e.target.files[0];const p=target;if(!f||!p)return;
   if(f.type&&f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name)){toast('PDFを選んでください');return}
   toast('アップロード中…');
-  try{const r=await assets.upload(f);
-    await db.doc('files/'+p.k).set({id:r.id,name:f.name,size:f.size,updatedAt:Date.now()});
-    toast(p.n+' を差し替えました')}catch(err){toast('差し替えに失敗しました：'+(err&&err.message||err))}};
+  try{
+    if(PUB){if(f.size>24*1024*1024){toast('24MB以下のPDFを選んでください');return}
+      await api('file/'+p.k,{method:'PUT',admin:true,headers:{'content-type':'application/pdf','x-filename':encodeURIComponent(f.name)},body:f});await pubLoad()}
+    else{const r=await assets.upload(f);
+    await db.doc('files/'+p.k).set({id:r.id,name:f.name,size:f.size,updatedAt:Date.now()})}
+    toast(p.n+' を差し替えました')}catch(err){toast(err&&err.status===401?'パスワードが無効です。管理を終了して入り直してください':'差し替えに失敗しました：'+(err&&err.message||err))}};
 async function revert(p){if(!db||!ov[p.k]){toast('差し替えはありません');return}
   try{await db.doc('files/'+p.k).delete();toast(p.n+' を元のファイルに戻しました')}catch(e){toast('元に戻せませんでした')}}
 
@@ -498,14 +529,18 @@ function applyOv(){
   try{D=await (await fetch('data.json')).json()}catch(e){document.body.append(el('p','msg','データを読み込めませんでした'));return}
   render();
   try{const fj=await (await fetch('feedback.json?'+Date.now())).json();(fj.items||[]).forEach(x=>{fbS[x.id]={part:x.part,name:x.name,bar:x.bar,text:x.text,at:x.at};if(x.done)sdone[x.id]=true});renderFb()}catch(e){}
+  if(PUB){dl=pubDl;assets={};db=pubDb;await pubLoad();setInterval(()=>{if(!document.hidden)pubLoad()},30000)}
+  else{
   try{dl=await claude.use('downloads')}catch(e){}
   try{assets=await claude.use('assets')}catch(e){}
-  try{db=await claude.use('db')}catch(e){}
-  if(db){let to=setTimeout(()=>{},0);
+  try{db=await claude.use('db')}catch(e){}}
+  if(db&&!PUB){let to=setTimeout(()=>{},0);
     db.collection('files').onSnapshot(s=>{const n={};s.docs.forEach(d=>{n[d.id]=d.data()});ov=n;applyOv()},()=>{});
     db.collection('feedback').onSnapshot(s=>{const n={};s.docs.forEach(d=>{n[d.id]=d.data()});fb=n;renderFb()},()=>{});
     db.collection('fbdone').onSnapshot(s=>{const n={};s.docs.forEach(d=>{n[d.id]=true});fdone=n;renderFb()},()=>{})}
-  else{const n=$('#fbnote');n.textContent='サインインしていない場合は、下のボタンからGoogleフォームで送信してください。';n.hidden=false;$('#fbf').hidden=true}
+  else if(!db){const n=$('#fbnote');n.textContent='サインインしていない場合は、下のボタンからGoogleフォームで送信してください。';n.hidden=false;$('#fbf').hidden=true}
 })();
 })();
 </script>
+</body>
+</html>
