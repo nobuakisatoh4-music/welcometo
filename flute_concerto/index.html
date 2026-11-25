@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flute Concerto — Welcome to...</title>
+<meta name="description" content="佐藤伸輝『フルート協奏曲』（世界初演）— 2026年12月16日 シアター1010。奏楽堂企画復活公演《Welcome to...》第II部。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&family=Tinos&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: hushed, sculptural, a concert programme read in a dim hall.
+IDEA: the printed full score's cover and title page, turned into one long sheet.
+PICTURE: the avatar chimera (score cover) bleeding into a grey field that matches its own backdrop.
+COLOUR and TYPE: the image's warm greys + near-black, one gold accent from the laurel; Quicksand (score lettering) + Zen Kaku Gothic New.
+LAYOUT: full-bleed grey hero (image right, title left on wide; stacked on phones), then charcoal sheet with note, credits, info.
+*/
+:root{
+  color-scheme:dark;
+  --grey-1:#bcbcba; --grey-2:#8e8d8b;
+  --sheet:#131312; --sheet-2:#1b1b1a;
+  --ink:#ecebe7; --mute:#a9a8a3; --line:#33322f;
+  --hero-ink:#151514;
+  --gold:#c9a24a;
+  --latin:"Quicksand",system-ui,sans-serif;
+  /* タイトル書体：凸版文久見出し明朝（モリサワ）。閲覧環境に無い場合は Tinos で代替 */
+  --title:"凸版文久見出し明朝 EB","凸版文久見出し明朝 StdN","凸版文久見出し明朝","Toppan Bunkyu Midashi Mincho StdN","Tinos","Times New Roman",Times,serif;
+  --jp:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--sheet);color:var(--ink);font:16px/1.9 var(--jp);overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;flex-wrap:wrap;align-items:center;gap:4px 22px;padding:14px max(5vw,16px);font:500 14px/1 var(--latin);color:var(--hero-ink);transition:background .3s,color .3s;background:rgba(178,178,176,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.nav.solid{background:rgba(19,19,18,.86);backdrop-filter:blur(10px);color:var(--ink)}
+.nav a{text-decoration:none;padding:10px 0;min-height:44px;display:inline-flex;align-items:center}
+.nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.nav .home{margin-inline-end:auto;font-weight:600}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;
+  background:radial-gradient(120% 90% at 70% 45%,var(--grey-1) 0%,#a9a9a7 45%,var(--grey-2) 100%);color:var(--hero-ink);overflow:hidden}
+.hero .txt{padding:110px max(5vw,16px) 64px;position:relative;z-index:2}
+.hero h1{margin:0;line-height:0}
+.hero h1 img{display:block;width:min(100%,640px);height:auto}
+.hero .for{margin:26px 0 0;line-height:0}
+.hero .for img{display:block;width:min(100%,560px);height:auto}
+.hero .jp{margin:28px 0 0;font:500 17px/1.7 var(--jp)}
+.hero .meta{margin:30px 0 0;padding-top:18px;border-top:1px solid rgba(21,21,20,.35);font:500 15px/1.8 var(--latin);display:flex;flex-wrap:wrap;gap:4px 26px}
+.hero .meta b{font-weight:600}
+.hero figure{margin:0;height:100%;position:relative}
+.hero .warp{position:absolute;inset:0;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 18%);mask-image:linear-gradient(to right,transparent 0,#000 18%)}
+.hero .warp img,.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero .warp img{object-fit:cover;object-position:center 30%}
+.hero canvas{opacity:0;transition:opacity .6s}
+.hero .warp.live canvas{opacity:1}
+.hero .warp.live img{visibility:hidden}
+.hero figcaption{position:absolute;right:max(5vw,16px);bottom:18px;font:400 12px/1.4 var(--latin);color:rgba(21,21,20,.7);z-index:2}
+.scroll-cue{position:absolute;left:max(5vw,16px);bottom:22px;font:500 13px/1 var(--latin);z-index:2;text-decoration:none}
+@media (prefers-reduced-motion:no-preference){
+  .hero .warp{animation:surface 2.4s cubic-bezier(.2,.7,.2,1) both}
+  .hero .txt>*{animation:rise 1.2s .3s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes surface{from{opacity:0;filter:blur(14px) grayscale(1);transform:scale(1.04)}to{opacity:1;filter:none;transform:none}}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+}
+
+/* sheet */
+.band{padding:clamp(56px,8vw,120px) max(5vw,16px)}
+.wrap{max-width:1180px;margin:0 auto}
+.sec-h{display:grid;grid-template-columns:minmax(max-content,320px) minmax(0,1fr);gap:24px 64px}
+h2{margin:0;font:400 clamp(30px,2.6vw,36px)/1.05 var(--latin);text-wrap:balance}
+h2 small{display:block;margin-top:10px;font:400 14px/1.5 var(--jp);color:var(--mute)}
+.lead{margin:0 0 1.6em;font:500 clamp(20px,2.2vw,26px)/1.6 var(--jp);text-wrap:balance}
+.note p{margin:0 0 1.5em;max-width:38em;font-size:17px;line-height:2.05;text-align:justify;text-justify:inter-character;font-feature-settings:"palt"}
+.note p:last-of-type{margin-bottom:0}
+.note .ask{color:var(--gold)}
+details.en{margin-top:36px;max-width:38em;border-top:1px solid var(--line)}
+details.en summary{cursor:pointer;list-style:none;padding:14px 0;min-height:44px;font:500 15px/1.4 var(--latin);color:var(--mute)}
+details.en summary::-webkit-details-marker{display:none}
+details.en summary::before{content:"+ ";color:var(--gold)}
+details.en[open] summary::before{content:"– "}
+details.en p{font:400 16px/1.75 var(--latin);text-align:left;color:#d8d7d2}
+
+.alt{background:var(--sheet-2)}
+.credits{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:0 40px}
+.credits li{padding:16px 0;border-bottom:1px solid var(--line)}
+.credits .role{display:block;font:400 13px/1.5 var(--latin);color:var(--mute)}
+.credits .name{display:block;font:500 19px/1.5 var(--jp)}
+.credits .name i{font:400 15px var(--latin);font-style:normal;color:var(--mute);margin-inline-start:.6em}
+.dedi{margin:32px 0 0;font:400 15px/1.6 var(--latin);color:var(--mute)}
+
+.inst{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:28px 40px;margin:0}
+.inst div{border-top:1px solid var(--line);padding-top:12px}
+.inst dt{font:500 14px/1.5 var(--latin);color:var(--gold);margin-bottom:6px}
+.inst dd{margin:0;font:400 15px/1.75 var(--latin)}
+.inst dd small{display:block;color:var(--mute);font-size:13px;line-height:1.5;margin-top:4px}
+.stage{margin:40px 0 0;max-width:38em;color:#d8d7d2}
+
+.info{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:40px;align-items:start}
+.info dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px 28px}
+.info dt{font:500 14px/1.9 var(--latin);color:var(--mute);white-space:nowrap}
+.info dd{margin:0;font-size:16px}
+.info .big{font:400 clamp(30px,3.4vw,42px)/1.1 var(--latin)}
+.btns{display:flex;flex-direction:column;gap:12px}
+.btn{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:56px;padding:14px 20px;border:1px solid var(--ink);text-decoration:none;font:500 16px/1.4 var(--jp);transition:background .2s,color .2s}
+.btn:hover{background:var(--ink);color:var(--sheet)}
+.btn.primary{background:var(--ink);color:var(--sheet)}
+.btn.primary:hover{background:var(--gold);border-color:var(--gold)}
+.btn span:last-child{font-family:var(--latin)}
+
+footer{padding:40px max(5vw,16px) 48px;border-top:1px solid var(--line);font:400 13px/1.8 var(--latin);color:var(--mute);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px}
+footer a{text-underline-offset:3px}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:minmax(0,1fr);min-height:auto}
+  .hero figure{order:-1;height:min(118vw,640px)}
+  .hero .warp{-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 100%);mask-image:linear-gradient(to bottom,#000 70%,transparent 100%)}
+  .hero .txt{padding:8px max(5vw,16px) 64px;margin-top:-80px}
+  .hero figcaption{display:none}
+  .scroll-cue{display:none}
+  .sec-h,.info{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){
+  .nav{gap:0 16px;font-size:13px}
+  .nav .home{flex-basis:100%}
+  .note p{font-size:16px;text-align:left}
+  .info dl{grid-template-columns:minmax(0,1fr);gap:2px}
+  .info dd{margin-bottom:12px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" aria-label="ページ内">
+  <a class="home" href="https://wel-come-to.com/">← Welcome to...</a>
+  <a href="#note">Note</a>
+  <a href="#credits">Credits</a>
+  <a href="#instrumentation">Instrumentation</a>
+  <a href="#info">Info / Ticket</a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="txt">
+    <h1><img src="title.png" alt="Flute Concerto" width="2307" height="601"></h1>
+    <p class="for"><img src="subtitle.png" alt="for Orchestra/flutist/virtual flutist/electronics" width="2303" height="163"></p>
+    <p class="jp">佐藤伸輝『フルート協奏曲』（世界初演）</p>
+    <div class="meta">
+      <span><b>2026.12.16</b> WED</span>
+      <span>THEATER 1010, Kitasenju</span>
+      <span>ca. 15 min</span>
+    </div>
+  </div>
+  <figure>
+    <div class="warp" id="warp"><canvas id="gl" aria-hidden="true"></canvas><img src="main-visual.jpg" alt="白い衣に金の葉冠をつけた複数のアバターの身体が絡み合い、フルートのような白い管を抱えるCGイメージ" width="931" height="1164"></div>
+    <figcaption>Video and avatar: JACKSON kaki</figcaption>
+  </figure>
+  <a class="scroll-cue" href="#note">Scroll ↓</a>
+</header>
+
+<main>
+  <section class="band" id="note">
+    <div class="wrap sec-h">
+      <h2>Programme note<small>作品解説</small></h2>
+      <div class="note">
+        <p class="lead">身体の拡張は、どの地点で「喪失」へと反転するのか。</p>
+        <p>本作は、協奏曲の伝統的な前提である「個人 対 オーケストラ」という階層構造を出発点としない。19世紀的な、絶対的でカリスマ的な存在としてのソリスト像も、20世紀的な、その主体性を解体しようとする批評的身振りも、ここでは出発点とはならない。むしろ本作は、ひとつのキメラから始まる。フルート、オーケストラ、エレクトロニクス、映像があまりにも密に重ね合わされ、いったい誰が語っているのか判別できない状態である。ソリストはこの巨大な塊のなかから救い出され、引き出されていく過程において、受動的に主体性を獲得するのである。</p>
+        <p>その背後には、楽器そのものが背負ってきた記憶がある。シュリンクスの神話では、追われる身体が葦へと姿を変え、さらにその葦が葦笛へと変わる。数世紀を経て、宮廷や音楽院、そして産業的な標準化がフルートの形を作り上げると同時に、それを演奏する身体をも規律化してきた。本作は、この記憶を、アルゴリズムによる最適化以前のインターネットの姿と並置する。そこにあったのは、まだ整理されていない混沌であり、個人が文脈から切り離され、あらゆる保護の枠組みを失ったまま、流れ込んでくるものすべてに対して無防備にさらされていた世界である。</p>
+        <p>舞台上では、フルート奏者とアバターが並び立つ。生身の演奏者は舞台演出によって覆い隠され、神格化されるのは演奏者ではなく、フルートそのものである。フルートはオーケストラのなかに、スピーカーのなかに、そして映像のなかに、音楽のあらゆる場所を占めていく。やがて、身体の拡張はその喪失へと転じる。</p>
+        <details class="en">
+          <summary>English</summary>
+          <p>This work does not take the concerto's traditional hierarchy of the individual against the orchestra as its premise. Neither the nineteenth-century image of the soloist as an absolute, charismatic figure, nor the twentieth-century critical gesture of dismantling that subjectivity, is treated as a point of departure. The piece begins instead with a chimera: flute, orchestra, electronics and video are layered so densely that it is impossible to tell who is speaking. The soloist does not step forward; the soloist is rescued from this mass, and acquires subjectivity passively, in the course of being drawn out.</p>
+          <p>Behind this lies the memory of the instrument itself. In the myth of Syrinx, a pursued body is turned into a reed, and the reed into pipes. Centuries later, courts, conservatoires and industrial standardisation shaped the flute, and disciplined the bodies of those who played it. The work sets this memory beside the internet before algorithmic optimisation: an unsorted chaos in which individuals, cut off from context and from every protective framework, were exposed, defenceless, to whatever arrived.</p>
+          <p>On stage, the flutist and an avatar stand side by side. The living player is veiled by the staging, and it is the flute, rather than the player, that is deified, as it takes up residence in every corner of the music: in the orchestra, in the loudspeakers, in the image. At some point, the extension of a body turns into its loss.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="credits">
+    <div class="wrap sec-h">
+      <h2>Credits<small>クレジット</small></h2>
+      <div>
+        <ul class="credits">
+          <li><span class="role">Flute</span><span class="name">菊地 奏絵<i>Kanae Kikuchi</i></span></li>
+          <li><span class="role">Conductor</span><span class="name">茶木 修平<i>Shuhei Chaki</i></span></li>
+          <li><span class="role">Orchestra</span><span class="name">東京藝術大学有志オーケストラ<i>GEIDAI Voluntary Orchestra</i></span></li>
+          <li><span class="role">Composition</span><span class="name">佐藤 伸輝<i>Nobuaki Satoh</i></span></li>
+          <li><span class="role">Electronics</span><span class="name">たこミ<i>tacomi</i></span></li>
+          <li><span class="role">Video and avatar</span><span class="name">JACKSON kaki</span></li>
+          <li><span class="role">Sound</span><span class="name">磯部 英彬<i>Hideaki Isobe</i></span></li>
+        </ul>
+        <p class="dedi">Dedicated to Kanae Kikuchi</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="instrumentation">
+    <div class="wrap sec-h">
+      <h2>Instrumentation<small>編成</small></h2>
+      <div>
+        <dl class="inst">
+          <div><dt>Soloist</dt><dd>Solo flute</dd></div>
+          <div><dt>Woodwinds</dt><dd>2 flutes (both doubling piccolo)<br>2 oboes<br>2 clarinets<br>1 bassoon</dd></div>
+          <div><dt>Brass</dt><dd>2 horns<br>1 trumpet<br>1 trombone</dd></div>
+          <div><dt>Percussion</dt><dd>1 timpani player<br>4 percussion<small>drum set, glockenspiel, xylophone, vibraphone</small></dd></div>
+          <div><dt>Strings</dt><dd>11 – 9 – 7 – 6 – 4<small>vn I – vn II – va – vc – cb</small>1 string quartet</dd></div>
+          <div><dt>Media</dt><dd>Electronics (fixed media)<br>Video (fixed media)</dd></div>
+        </dl>
+        <p class="stage">ソロ・フルートは舞台中央に置かれた透明なボックスの中で演奏する。映像は舞台上方に投影され、光とスモークが頭上から降りる。いくつかの場面でボックスは黒い布で覆われる。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="info">
+    <div class="wrap sec-h">
+      <h2>Information<small>公演情報</small></h2>
+      <div class="info">
+        <dl>
+          <dt>Date</dt><dd><span class="big">2026.12.16</span><br>2026年12月16日（水）</dd>
+          <dt>Time</dt><dd>17:45 開場 ／ 18:30 開演</dd>
+          <dt>Venue</dt><dd>シアター1010（THEATER 1010）<br>〒120-0034 東京都足立区千住3-92 千住ミルディスI番館 10階<br>北千住駅 4番出口より徒歩4分</dd>
+          <dt>Programme</dt><dd>第I部　カイヤ・サーリアホ《エミリー》<br>第II部　佐藤伸輝『フルート協奏曲』（世界初演）</dd>
+        </dl>
+        <div class="btns">
+          <a class="btn primary" href="https://docs.google.com/forms/d/16k7xTWVUyYybMxLjO58ityado6woFQUTbARE1QF6A7U/viewform" target="_blank" rel="noopener"><span>チケットを予約する</span><span>→</span></a>
+          <a class="btn" href="https://motion-gallery.net/projects/Welcome_to" target="_blank" rel="noopener"><span>クラウドファンディングで応援する</span><span>→</span></a>
+          <a class="btn" href="https://maps.google.com/?q=%E3%82%B7%E3%82%A2%E3%82%BF%E3%83%BC1010+%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%B6%B3%E7%AB%8B%E5%8C%BA%E5%8D%83%E4%BD%8F3-92" target="_blank" rel="noopener"><span>会場マップ</span><span>→</span></a>
+          <a class="btn" href="https://wel-come-to.com/"><span>《Welcome to...》公演サイトへ</span><span>←</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>2026.12.16 WED | THEATER 1010, KITASENJU<br>東京藝術大学有志オーケストラ ／ 奏楽堂企画復活公演《Welcome to...》実行委員会</span>
+  <span><a href="https://wel-come-to.com/">wel-come-to.com</a><br>© 2026 WELCOME TO... PROJECT</span>
+</footer>
+
+<script>
+{
+  /* ぐにゃぐにゃ：WebGLで画像を流体のように歪ませる（GPU描画で60fps） */
+  const warp=document.getElementById('warp'), cv=document.getElementById('gl'), img=warp.querySelector('img');
+  const rm=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const gl=cv.getContext('webgl',{premultipliedAlpha:false,antialias:false});
+  if(gl){
+    const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    const fs=`precision highp float;
+uniform sampler2D tex;uniform vec2 res;uniform float t;uniform vec2 sc;uniform vec2 off;
+vec3 h3(vec3 p){p=vec3(dot(p,vec3(127.1,311.7,74.7)),dot(p,vec3(269.5,183.3,246.1)),dot(p,vec3(113.5,271.9,124.6)));return -1.+2.*fract(sin(p)*43758.5453);}
+float n3(vec3 p){vec3 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);
+return mix(mix(mix(dot(h3(i),f),dot(h3(i+vec3(1,0,0)),f-vec3(1,0,0)),u.x),mix(dot(h3(i+vec3(0,1,0)),f-vec3(0,1,0)),dot(h3(i+vec3(1,1,0)),f-vec3(1,1,0)),u.x),u.y),
+mix(mix(dot(h3(i+vec3(0,0,1)),f-vec3(0,0,1)),dot(h3(i+vec3(1,0,1)),f-vec3(1,0,1)),u.x),mix(dot(h3(i+vec3(0,1,1)),f-vec3(0,1,1)),dot(h3(i+vec3(1,1,1)),f-vec3(1,1,1)),u.x),u.y),u.z);}
+void main(){
+  vec2 uv=gl_FragCoord.xy/res; uv.y=1.-uv.y;
+  vec2 q=uv*vec2(res.x/res.y,1.)*1.6;
+  float s=t*.12;
+  vec2 w=vec2(n3(vec3(q,s)),n3(vec3(q+7.3,s+3.1)));
+  vec2 d=vec2(n3(vec3(q*1.3+w*1.4,s*1.3+11.)),n3(vec3(q*1.3+w*1.4+4.7,s*1.3+19.)));
+  vec2 st=off+(uv+d*.045)*sc;
+  gl_FragColor=texture2D(tex,clamp(st,0.,1.));
+}`;
+    const sh=(type,src)=>{const o=gl.createShader(type);gl.shaderSource(o,src);gl.compileShader(o);return o;};
+    const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);
+    if(gl.getProgramParameter(pr,gl.LINK_STATUS)){
+      gl.useProgram(pr);
+      const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+      const loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+      const U=n=>gl.getUniformLocation(pr,n), uRes=U('res'),uT=U('t'),uSc=U('sc'),uOff=U('off');
+      const tx=gl.createTexture();
+      let ready=false, raf=0, visible=true, t0=performance.now();
+      const fit=()=>{
+        const dpr=Math.min(window.devicePixelRatio||1,1.5), W=cv.clientWidth, H=cv.clientHeight;
+        if(!W||!H) return;
+        cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); gl.viewport(0,0,cv.width,cv.height);
+        const ca=W/H, ia=img.naturalWidth/img.naturalHeight; let sc=[1,1], off=[0,0];
+        if(ca>ia){sc[1]=ia/ca; off[1]=(1-sc[1])*.3;} else {sc[0]=ca/ia; off[0]=(1-sc[0])*.5;}
+        gl.uniform2f(uRes,cv.width,cv.height); gl.uniform2f(uSc,sc[0],sc[1]); gl.uniform2f(uOff,off[0],off[1]);
+      };
+      const frame=now=>{ gl.uniform1f(uT,(now-t0)/1000); gl.drawArrays(gl.TRIANGLE_STRIP,0,4); };
+      const loop=now=>{ frame(now); raf=requestAnimationFrame(loop); };
+      const run=()=>{ cancelAnimationFrame(raf); if(!ready) return;
+        if(rm.matches){ warp.classList.remove('live'); return; }
+        warp.classList.add('live'); if(visible) raf=requestAnimationFrame(loop); };
+      const init=()=>{
+        try{
+          gl.bindTexture(gl.TEXTURE_2D,tx);
+          gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);
+          [[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE],[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR]].forEach(([k,v])=>gl.texParameteri(gl.TEXTURE_2D,k,v));
+          ready=true; fit(); run();
+        }catch(e){ /* 読み込めない環境では静止画のまま */ }
+      };
+      if(img.complete&&img.naturalWidth) init(); else img.addEventListener('load',init,{once:true});
+      const ro=new ResizeObserver(()=>{ if(ready){fit(); if(!raf||rm.matches) frame(performance.now());} }); ro.observe(cv);
+      const vis=new IntersectionObserver(([e])=>{ visible=e.isIntersecting; run(); }); vis.observe(warp);
+      rm.addEventListener?.('change',run);
+    }
+  }
+}
+{
+  const nav=document.getElementById('nav');
+  const hero=document.getElementById('top');
+  const io=new IntersectionObserver(([e])=>nav.classList.toggle('solid',!e.isIntersecting),{rootMargin:'-64px 0px 0px 0px'});
+  io.observe(hero);
+}
+</script>
+</body>
+</html>
