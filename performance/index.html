@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Flute Concerto 演出・技術プラン | Welcome to…</title>
+<style>
+  :root { --bg:#0b0b0e; --panel:#15151a; --ink:#ececf1; --quiet:#9a9aa6; --line:#2a2a33; --accent:#ffb866; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif; line-height:1.7; }
+  header, main, footer { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  header { padding-top: 48px; }
+  h1 { font-size: 28px; font-weight: 600; margin: 0 0 4px; letter-spacing: .02em; }
+  .sub { color: var(--quiet); margin: 0 0 32px; }
+  h2 { font-size: 19px; font-weight: 600; margin: 48px 0 12px; border-top: 1px solid var(--line); padding-top: 28px; }
+  p { margin: 0 0 12px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  svg { width: 100%; height: auto; display: block; border-radius: 8px; }
+  .controls { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+  .ctl { display: grid; grid-template-columns: 170px 1fr 56px; align-items: center; gap: 12px; font-size: 14px; }
+  .ctl output { color: var(--quiet); text-align: right; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .check { font-size: 14px; display: flex; gap: 8px; align-items: center; }
+  .status { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 15px; }
+  .ok { color: #9fd3a8; } .ng { color: #ff8a7a; }
+  .doc-frame { width: 100%; height: 80vh; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+  .btn { display: inline-block; margin: 0 8px 12px 0; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 14px; background: var(--panel); }
+  .btn:hover { border-color: var(--accent); }
+  .note { color: var(--quiet); font-size: 13px; }
+  .notice { border: 1px dashed var(--line); border-radius: 12px; padding: 16px; color: var(--quiet); }
+  footer { color: var(--quiet); font-size: 12px; padding: 48px 20px; }
+  @media (max-width: 600px) { .ctl { grid-template-columns: 1fr; gap: 2px; } .ctl output { text-align: left; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Flute Concerto 演出・技術プラン</h1>
+  <p class="sub">「Welcome to…」2026年12月16日・シアター1010 ／ 制作スタッフ用ページ</p>
+</header>
+
+<main>
+  <h2>シミュレーター：客席から見た黒い箱</h2>
+  <p>スライダーで、煙の濃さ・布の透明さ・電球の明るさと位置・トップライトの太さを変えると、客席からの見え方が変わります。数値は考え方を確かめるための目安で、実際の明るさはリハーサルで決めます。</p>
+  <div class="panel">
+    <svg id="stage" viewBox="0 0 760 470" role="img" aria-label="煙と光と電球の位置のシミュレーター">
+      <defs>
+        <radialGradient id="g-bulb"><stop offset="0" stop-color="#ffcf8a"/><stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/></radialGradient>
+        <linearGradient id="g-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2f6ff" stop-opacity=".9"/><stop offset="1" stop-color="#dfe8ff" stop-opacity=".55"/></linearGradient>
+        <filter id="f-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+        <filter id="f-soft"><feGaussianBlur stdDeviation="2"/></filter>
+        <clipPath id="c-box"><rect x="250" y="170" width="260" height="260"/></clipPath>
+      </defs>
+      <rect width="760" height="470" fill="#07070a"/>
+      <g id="video">
+        <rect x="110" y="36" width="540" height="126" fill="#3a3d44"/>
+        <polygon points="160,50 330,70 300,150 140,140" fill="#8a8f99"/>
+        <polygon points="420,46 610,66 590,130 440,120" fill="#8a8f99"/>
+      </g>
+      <g id="orchestra"></g>
+      <g clip-path="url(#c-box)">
+        <rect x="250" y="170" width="260" height="260" fill="#050403"/>
+        <circle id="glow" cx="388" cy="214" r="100" fill="url(#g-bulb)"/>
+        <circle id="bulbBack" cx="388" cy="214" r="4" fill="#fff1c8"/>
+        <g id="performer">
+          <circle id="head" cx="380" cy="232" r="13" fill="#000"/>
+          <path id="body" d="M366 248 L394 248 L402 330 L410 430 L350 430 L358 330 Z" fill="#000"/>
+          <line id="flute" x1="372" y1="242" x2="300" y2="244" stroke="#000" stroke-width="3"/>
+          <g id="rim" filter="url(#f-soft)" fill="none" stroke="#ffb866">
+            <circle cx="380" cy="232" r="14" stroke-width="2.5"/>
+            <path d="M366 248 L358 330 L350 430 M394 248 L402 330 L410 430" stroke-width="2"/>
+          </g>
+        </g>
+        <circle id="bulbFront" cx="388" cy="214" r="4" fill="#fff1c8"/>
+      </g>
+      <rect id="fabricDark" x="250" y="170" width="260" height="260" fill="#000"/>
+      <rect id="fabricSpill" x="250" y="170" width="260" height="260" fill="#dfe8ff"/>
+      <polygon points="510,170 560,190 560,410 510,430" fill="#0a0a0c"/>
+      <polygon id="sideGlow" points="510,170 560,190 560,410 510,430" fill="#ffb060"/>
+      <rect x="250" y="170" width="260" height="260" fill="none" stroke="#2a2a30" stroke-width="2"/>
+      <polygon id="beam" fill="url(#g-beam)"/>
+      <ellipse id="beamSpot" cx="380" cy="170" ry="4" fill="#f2f6ff" fill-opacity=".7"/>
+      <g id="smoke" filter="url(#f-blur)"></g>
+      <rect id="haze" width="760" height="470" fill="#9aa1ab"/>
+      <rect y="430" width="760" height="40" fill="#040405"/>
+    </svg>
+    <div class="status"><span id="look"></span><span id="sheet"></span></div>
+    <div class="controls">
+      <label class="ctl">煙の濃さ<input type="range" id="smoke-in" min="0" max="100" value="70"><output id="smoke-out"></output></label>
+      <label class="ctl">布の透明さ<input type="range" id="fabric-in" min="0" max="100" value="35"><output id="fabric-out"></output></label>
+      <label class="ctl">電球の明るさ<input type="range" id="bulb-in" min="0" max="100" value="40"><output id="bulb-out"></output></label>
+      <label class="ctl">電球の横位置<input type="range" id="bx-in" min="-80" max="80" value="8"><output id="bx-out"></output></label>
+      <label class="ctl">電球の高さ<input type="range" id="by-in" min="-60" max="60" value="-8"><output id="by-out"></output></label>
+      <label class="ctl">トップライトの太さ<input type="range" id="beam-in" min="0" max="100" value="15"><output id="beam-out"></output></label>
+      <label class="check"><input type="checkbox" id="front-in">電球を顔の前側に置く（オフ＝頭の後ろ）</label>
+    </div>
+  </div>
+
+  <h2>資料（スタッフ全員で編集）</h2>
+  <p>本文はGoogleドキュメントで管理しています。編集権限のあるスタッフが直すと、このページにも反映されます。画像もGoogleドキュメントに直接貼り付けられます。</p>
+  <div id="doc-area"></div>
+</main>
+
+<footer>このページは制作スタッフ用です。検索エンジンには表示されない設定にしています。</footer>
+
+<script>
+  // ===== 設定：GoogleドキュメントのID =====
+  // ドキュメントのURL https://docs.google.com/document/d/【ここ】/edit の【ここ】を入れてください。
+  const DOC_ID = "";
+
+  const docArea = document.getElementById("doc-area");
+  if (DOC_ID) {
+    docArea.innerHTML =
+      '<a class="btn" href="https://docs.google.com/document/d/' + DOC_ID + '/edit" target="_blank" rel="noopener">Googleドキュメントで編集する</a>' +
+      '<iframe class="doc-frame" src="https://docs.google.com/document/d/' + DOC_ID + '/preview" title="Flute Concerto 演出・技術プラン"></iframe>' +
+      '<p class="note">埋め込みが表示されないときは、ドキュメントの共有設定（リンクを知っている人が閲覧可）を確認してください。</p>';
+  } else {
+    docArea.innerHTML = '<div class="notice">ここにGoogleドキュメントが表示されます。index.html の DOC_ID を設定してください。</div>';
+  }
+
+  // ===== シミュレーター =====
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+  const mk = (tag, attrs, parent) => { const el = document.createElementNS(NS, tag); for (const k in attrs) el.setAttribute(k, attrs[k]); parent.appendChild(el); return el; };
+
+  [70, 120, 170, 210, 560, 610, 660, 700].forEach((x, i) => {
+    const y = i % 2 ? 360 : 330;
+    mk("circle", { cx: x, cy: y, r: 16, fill: "#ffb060", "fill-opacity": .12, filter: "url(#f-soft)" }, $("orchestra"));
+    mk("circle", { cx: x, cy: y, r: 2.5, fill: "#ffd9a0" }, $("orchestra"));
+  });
+  const clouds = [[230,380,150,60],[380,410,200,55],[540,385,150,60],[300,300,120,45],[470,310,130,45],[380,250,110,40]]
+    .map(c => mk("ellipse", { cx: c[0], cy: c[1], rx: c[2], ry: c[3], fill: "#9aa1ab" }, $("smoke")));
+
+  const ids = ["smoke", "fabric", "bulb", "bx", "by", "beam"];
+  const units = { smoke: "%", fabric: "%", bulb: "%", beam: "%", bx: "", by: "" };
+
+  function render() {
+    const v = {}; ids.forEach(k => { v[k] = Number($(k + "-in").value); $(k + "-out").textContent = v[k] + units[k]; });
+    const front = $("front-in").checked;
+    const s = v.smoke / 100, f = v.fabric / 100, b = v.bulb / 100, w = v.beam / 100;
+    const hx = 380, hy = 232, px = hx + v.bx, py = 222 + v.by;
+    const beamHalf = 6 + w * 120, spill = Math.max(0, beamHalf - 40) / 100;
+    const dist = Math.hypot(px - hx, py - hy), hidden = !front && dist < 15;
+
+    [$("video").children[0]].forEach(el => el.setAttribute("fill-opacity", .9 - .45 * s));
+    [$("video").children[1], $("video").children[2]].forEach(el => el.setAttribute("fill-opacity", .75 - .55 * s));
+
+    $("glow").setAttribute("cx", px); $("glow").setAttribute("cy", py);
+    $("glow").setAttribute("r", 50 + b * 110); $("glow").setAttribute("fill-opacity", b * .9);
+    ["bulbBack", "bulbFront"].forEach(id => { $(id).setAttribute("cx", px); $(id).setAttribute("cy", py); $(id).setAttribute("fill-opacity", .3 + .7 * b); });
+    $("bulbBack").style.display = (!front && !hidden) ? "" : "none";
+    $("bulbFront").style.display = front ? "" : "none";
+
+    $("head").setAttribute("fill", front ? "#6b4426" : "#000");
+    $("head").setAttribute("fill-opacity", front ? .35 + .6 * b : 1);
+    $("body").setAttribute("fill", front ? "#4a2e19" : "#000");
+    $("body").setAttribute("fill-opacity", front ? .3 + .5 * b : 1);
+    $("flute").setAttribute("stroke", front ? "#c9a46a" : "#000");
+    $("rim").style.display = front ? "none" : "";
+    $("rim").setAttribute("stroke-opacity", b * Math.max(0, 1 - dist / 90));
+
+    $("fabricDark").setAttribute("fill-opacity", 1 - f * .9);
+    $("fabricSpill").setAttribute("fill-opacity", spill * .35);
+    $("sideGlow").setAttribute("fill-opacity", b * f * .12);
+
+    $("beam").setAttribute("points", `377,0 383,0 ${380 + beamHalf},170 ${380 - beamHalf},170`);
+    $("beam").setAttribute("fill-opacity", .08 + .8 * s);
+    $("beamSpot").setAttribute("rx", beamHalf);
+    clouds.forEach(c => c.setAttribute("fill-opacity", s * .42));
+    $("haze").setAttribute("fill-opacity", s * .06);
+
+    const inner = b * f * (1 - .55 * s) * (1 - .6 * spill);
+    const look = inner < .04 ? "見えない" : inner < .14 ? "ギリギリ見える" : inner < .3 ? "影がはっきり見える" : "姿が見えすぎる";
+    $("look").textContent = "奏者の見え方：" + look;
+    const ok = v.smoke < 75;
+    $("sheet").textContent = ok ? "譜面：読める" : "譜面：読めなくなる恐れ（スモークを止める）";
+    $("sheet").className = ok ? "ok" : "ng";
+  }
+  document.querySelectorAll("input").forEach(el => el.addEventListener("input", render));
+  render();
+</script>
+</body>
+</html>
